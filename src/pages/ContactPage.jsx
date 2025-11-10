@@ -168,9 +168,9 @@ export default function ContactPage() {
           <div>
             <h4 className="font-semibold text-gray-800 mb-3">Contact Us</h4>
             <ul className="text-gray-600 text-sm space-y-2">
-              <li>📞 +1 234 567 890</li>
-              <li>✉️ info@heavenproperties.com</li>
-              <li>📍 47 West Sierra Villa Drive, Phoenix</li>
+              <li>📞 +91 9871991277</li>
+              <li>✉️ heavenproperties@gmail.com</li>
+              <li>📍 Chandigarh, India</li>
             </ul>
           </div>
         </div>
