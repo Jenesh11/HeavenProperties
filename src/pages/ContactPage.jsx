@@ -77,15 +77,15 @@ export default function ContactPage() {
             <ul className="space-y-4 text-gray-600">
               <li>
                 <span className="font-semibold text-gray-800">Phone:</span>{" "}
-                +1 234 567 890
+                +91 9871991277
               </li>
               <li>
                 <span className="font-semibold text-gray-800">Email:</span>{" "}
-                info@heavenproperties.com
+                heavenproperties@gmail.com
               </li>
               <li>
                 <span className="font-semibold text-gray-800">Address:</span>{" "}
-                47 West Sierra Villa Drive, Phoenix
+                Chandigarh, India
               </li>
             </ul>
           </div>
