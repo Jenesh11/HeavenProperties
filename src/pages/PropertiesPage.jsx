@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 import usePropertiesFromSheet from "../hooks/usePropertiesFromSheet";
@@ -6,14 +6,34 @@ import usePropertiesFromSheet from "../hooks/usePropertiesFromSheet";
 export default function PropertiesPage() {
   const { properties, loading, error } = usePropertiesFromSheet();
   const [filter, setFilter] = useState("All");
+  const [filtered, setFiltered] = useState([]);
 
-  // 🎯 Apply filter based on property type
-  const filtered =
-    filter === "All"
-      ? properties
-      : properties.filter((p) =>
-          p.type?.toLowerCase().includes(filter.toLowerCase())
-        );
+  // 🎯 Filter logic (always from original properties, never cumulative)
+  useEffect(() => {
+    if (!Array.isArray(properties) || properties.length === 0) return;
+
+    const normalize = (val) => (val || "").trim().toLowerCase();
+
+    if (filter === "All") {
+      setFiltered(properties);
+    } else if (filter === "For Sale") {
+      setFiltered(
+        properties.filter(
+          (p) =>
+            normalize(p.purpose) === "for sale" ||
+            normalize(p.type) === "for sale"
+        )
+      );
+    } else if (filter === "For Rent") {
+      setFiltered(
+        properties.filter(
+          (p) =>
+            normalize(p.purpose) === "for rent" ||
+            normalize(p.type) === "for rent"
+        )
+      );
+    }
+  }, [filter, properties]);
 
   if (loading)
     return (
@@ -79,12 +99,14 @@ export default function PropertiesPage() {
                 <div className="p-5 text-left">
                   <span
                     className={`text-xs px-2 py-1 rounded-md font-medium ${
-                      property.type?.toLowerCase().includes("sale")
+                      (property.purpose || property.type || "")
+                        .toLowerCase()
+                        .includes("sale")
                         ? "bg-green-100 text-green-700"
                         : "bg-blue-100 text-blue-700"
                     }`}
                   >
-                    {property.type || "Property"}
+                    {property.purpose || property.type || "Property"}
                   </span>
 
                   <h2 className="text-lg font-semibold mt-2 text-gray-800 truncate">

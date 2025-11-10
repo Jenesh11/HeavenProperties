@@ -42,78 +42,40 @@ export default function PropertyDetails() {
     );
   }
 
-  // ✅ Universal Video Renderer
+  // ✅ Enhanced Video Renderer (Fixes YouTube Shorts / Watch / Embed)
   const renderVideo = (url) => {
     if (!url) return <p className="text-gray-500">No video available.</p>;
+
     try {
-      if (url.includes("youtube.com") || url.includes("youtu.be")) {
+      let embedUrl = "";
+
+      if (url.includes("youtu")) {
+        // Handle various YouTube formats
         let videoId = "";
-        if (url.includes("youtu.be/")) videoId = url.split("youtu.be/")[1].split("?")[0];
-        else if (url.includes("watch?v=")) videoId = url.split("watch?v=")[1].split("&")[0];
-        else if (url.includes("shorts/")) videoId = url.split("shorts/")[1].split("?")[0];
-        else if (url.includes("embed/")) videoId = url.split("embed/")[1].split("?")[0];
-        const embedUrl = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`;
-        return (
-          <iframe
-            src={embedUrl}
-            title="YouTube Video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            frameBorder="0"
-            className="absolute top-0 left-0 w-full h-full rounded-lg"
-          ></iframe>
-        );
-      }
+        if (url.includes("youtu.be/")) {
+          videoId = url.split("youtu.be/")[1].split("?")[0];
+        } else if (url.includes("watch?v=")) {
+          videoId = url.split("watch?v=")[1].split("&")[0];
+        } else if (url.includes("shorts/")) {
+          videoId = url.split("shorts/")[1].split("?")[0];
+        } else if (url.includes("embed/")) {
+          videoId = url.split("embed/")[1].split("?")[0];
+        }
 
-      if (url.includes("vimeo.com")) {
+        embedUrl = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`;
+      } else if (url.includes("vimeo.com")) {
         const vimeoId = url.split("/").pop();
-        const embedUrl = `https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&muted=1`;
-        return (
-          <iframe
-            src={embedUrl}
-            title="Vimeo Video"
-            allow="autoplay; fullscreen; picture-in-picture"
-            allowFullScreen
-            frameBorder="0"
-            className="absolute top-0 left-0 w-full h-full rounded-lg"
-          ></iframe>
-        );
-      }
-
-      if (url.includes("drive.google.com")) {
+        embedUrl = `https://player.vimeo.com/video/${vimeoId}?autoplay=0`;
+      } else if (url.includes("drive.google.com")) {
         const fileIdMatch = url.match(/[-\w]{25,}/);
         const fileId = fileIdMatch ? fileIdMatch[0] : null;
-        const embedUrl = fileId
+        embedUrl = fileId
           ? `https://drive.google.com/file/d/${fileId}/preview`
           : url;
-        return (
-          <iframe
-            src={embedUrl}
-            title="Google Drive Video"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            frameBorder="0"
-            className="absolute top-0 left-0 w-full h-full rounded-lg"
-          ></iframe>
-        );
-      }
-
-      if (url.includes("streamable.com")) {
-        const videoId = url.split("/").pop();
-        const embedUrl = `https://streamable.com/e/${videoId}`;
-        return (
-          <iframe
-            src={embedUrl}
-            title="Streamable Video"
-            allow="autoplay; fullscreen"
-            allowFullScreen
-            frameBorder="0"
-            className="absolute top-0 left-0 w-full h-full rounded-lg"
-          ></iframe>
-        );
-      }
-
-      if (url.endsWith(".mp4")) {
+      } else if (url.includes("streamable.com")) {
+        const streamId = url.split("/").pop();
+        embedUrl = `https://streamable.com/e/${streamId}`;
+      } else if (url.endsWith(".mp4")) {
         return (
           <video controls autoPlay loop muted className="w-full rounded-lg">
             <source src={url} type="video/mp4" />
@@ -121,7 +83,19 @@ export default function PropertyDetails() {
         );
       }
 
-      return <p className="text-gray-500">Unsupported video format.</p>;
+      if (!embedUrl)
+        return <p className="text-gray-500">Unsupported video format.</p>;
+
+      return (
+        <iframe
+          src={embedUrl}
+          title="Property Video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          frameBorder="0"
+          className="absolute top-0 left-0 w-full h-full rounded-lg"
+        ></iframe>
+      );
     } catch (err) {
       console.error("Video parsing error:", err);
       return <p className="text-gray-500">Error loading video.</p>;
