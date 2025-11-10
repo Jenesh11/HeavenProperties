@@ -1,0 +1,49 @@
+/* Tailwind CSS base import (v4 syntax) */
+@import "tailwindcss";
+
+/* Enable smooth scrolling for the entire website */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optional: Custom global styles for a cleaner look */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #0a192f;
+  color: white;
+  overflow-x: hidden; /* prevent horizontal scrollbars */
+}
+
+/* Scrollbar styling (optional but nice for modern design) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3ed598;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #34c48c;
+}
+
+/* Remove default link styling */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Add smooth hover transitions */
+* {
+  transition: all 0.2s ease-in-out;
+}
+.swiper-button-next,
+.swiper-button-prev {
+  color: white !important;
+  transition: color 0.3s ease;
+}
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #22c55e !important; /* Tailwind green-500 */
+}
