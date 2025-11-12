@@ -1,8 +1,9 @@
 {
-  "framework": "sanity",
+  "framework": null,
   "buildCommand": "npm run build",
   "outputDirectory": ".sanity",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/", "destination": "/runtime/index.html" },
+    { "source": "/(.*)", "destination": "/runtime/index.html" }
   ]
 }
