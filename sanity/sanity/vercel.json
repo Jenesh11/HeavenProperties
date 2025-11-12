@@ -2,8 +2,13 @@
   "framework": null,
   "buildCommand": "npm run build",
   "outputDirectory": ".sanity",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/", "destination": "/runtime/" }
+  ],
   "rewrites": [
-    { "source": "/", "destination": "/runtime/index.html" },
+    { "source": "/runtime/(.*)", "destination": "/runtime/$1" },
     { "source": "/(.*)", "destination": "/runtime/index.html" }
   ]
 }
