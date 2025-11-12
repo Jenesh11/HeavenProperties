@@ -4,7 +4,10 @@ import HomePage from "./pages/HomePage";
 import PropertiesPage from "./pages/PropertiesPage";
 import PropertyDetails from "./pages/PropertyDetails";
 import ContactPage from "./pages/ContactPage";
-import usePropertiesFromSheet from "./hooks/usePropertiesFromSheet";
+import useFeaturedPropertiesFromSanity from "./hooks/useFeaturedPropertiesFromSanity";
+
+
+
 
 export default function App() {
   return (
