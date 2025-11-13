@@ -106,8 +106,8 @@ export default function HomePage() {
           {featured.length > 0 ? (
             featured.map((property) => (
               <Link
-                key={property.id}
-                to={`/property/${property.id}`}
+                key={property._id}
+                to={`/property/${property._id}`}
                 className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition"
               >
                 <img

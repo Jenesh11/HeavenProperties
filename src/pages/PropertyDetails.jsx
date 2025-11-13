@@ -13,6 +13,7 @@ Modal.setAppElement("#root");
 export default function PropertyDetails() {
   const { id } = useParams();
   const { properties, loading, error } = useFeaturedPropertiesFromSanity();
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -25,6 +26,7 @@ export default function PropertyDetails() {
     setTimeout(() => setSent(false), 4000);
   };
 
+  // 🔄 Still loading
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-600">
@@ -32,6 +34,7 @@ export default function PropertyDetails() {
       </div>
     );
 
+  // ❌ Error while fetching
   if (error)
     return (
       <div className="min-h-screen flex items-center justify-center text-red-600">
@@ -39,7 +42,10 @@ export default function PropertyDetails() {
       </div>
     );
 
+  // 🎯 FIXED — Find property using _id (Sanity uses _id, NOT id)
   const property = properties.find((p) => String(p._id) === String(id));
+
+  // ❌ If property does not exist
   if (!property) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white">
@@ -51,13 +57,14 @@ export default function PropertyDetails() {
     );
   }
 
-  // 🎥 FIXED — Fully working YouTube embed handler
+  // 🎥 YouTube / Vimeo / Drive / MP4 Video Renderer
   const renderVideo = (url) => {
     if (!url) return <p className="text-gray-500">No video available.</p>;
+
     try {
       let embedUrl = "";
 
-      // ✅ Handle all YouTube variants
+      // YouTube formats
       if (url.includes("youtube.com") || url.includes("youtu.be")) {
         let videoId = "";
         if (url.includes("youtu.be/"))
@@ -66,31 +73,29 @@ export default function PropertyDetails() {
           videoId = url.split("watch?v=")[1].split("&")[0];
         else if (url.includes("shorts/"))
           videoId = url.split("shorts/")[1].split("?")[0];
-        else if (url.includes("/embed/"))
-          videoId = url.split("/embed/")[1].split("?")[0];
 
-        embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=0&modestbranding=1&rel=0&enablejsapi=1`;
+        embedUrl = `https://www.youtube.com/embed/${videoId}`;
       }
 
-      // ✅ Google Drive Support
+      // Google Drive
       else if (url.includes("drive.google.com")) {
         const match = url.match(/[-\w]{25,}/);
         if (match) embedUrl = `https://drive.google.com/file/d/${match[0]}/preview`;
       }
 
-      // ✅ Vimeo
+      // Vimeo
       else if (url.includes("vimeo.com")) {
         const id = url.split("/").pop();
         embedUrl = `https://player.vimeo.com/video/${id}`;
       }
 
-      // ✅ Streamable
+      // Streamable
       else if (url.includes("streamable.com")) {
         const id = url.split("/").pop();
         embedUrl = `https://streamable.com/e/${id}`;
       }
 
-      // ✅ MP4 direct link fallback
+      // Direct MP4
       else if (url.endsWith(".mp4")) {
         return (
           <video controls className="w-full rounded-lg">
@@ -107,19 +112,15 @@ export default function PropertyDetails() {
           src={embedUrl}
           title="Property Video"
           className="absolute top-0 left-0 w-full h-full rounded-lg"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          loading="lazy"
         ></iframe>
       );
-    } catch (err) {
-      console.error("Video Render Error:", err);
+    } catch {
       return <p className="text-gray-500">Error loading video.</p>;
     }
   };
 
-  // 🗺️ Smart Map Renderer
+  // 🗺 Map (lat + lng or fallback to location)
   const renderMap = () => {
     const lat = parseFloat(property.lat);
     const lng = parseFloat(property.lng);
@@ -128,10 +129,9 @@ export default function PropertyDetails() {
       const bbox = `${lng - 0.02}%2C${lat - 0.02}%2C${lng + 0.02}%2C${lat + 0.02}`;
       return (
         <iframe
-          title="Property Location"
+          title="Property Map"
           src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat}%2C${lng}`}
-          className="w-full h-80 rounded-lg border-none shadow-md"
-          loading="lazy"
+          className="w-full h-80 rounded-lg"
         ></iframe>
       );
     }
@@ -139,12 +139,11 @@ export default function PropertyDetails() {
     if (property.location) {
       return (
         <iframe
-          title="Property Location"
+          title="Location Map"
           src={`https://www.google.com/maps?q=${encodeURIComponent(
-            property.location + ", India"
+            property.location
           )}&z=14&output=embed`}
-          className="w-full h-80 rounded-lg border-none shadow-md"
-          loading="lazy"
+          className="w-full h-80 rounded-lg"
         ></iframe>
       );
     }
@@ -152,11 +151,10 @@ export default function PropertyDetails() {
     return <p className="text-gray-500">Map location not available.</p>;
   };
 
-  const openModal = (index) => {
-    setSelectedIndex(index);
+  const openModal = (i) => {
+    setSelectedIndex(i);
     setIsOpen(true);
   };
-  const closeModal = () => setIsOpen(false);
 
   const whatsappMessage = encodeURIComponent(
     `Hi! I'm interested in the property "${property.name}". Please share more details.`
@@ -167,169 +165,146 @@ export default function PropertyDetails() {
       <Navbar />
 
       <div className="pt-28">
-        {/* 🏞️ Image Gallery */}
+        {/* Images */}
         <section className="max-w-6xl mx-auto px-6 py-10">
           <div className="grid md:grid-cols-3 gap-4">
-            {Array.isArray(property.images) && property.images.length > 0 ? (
+            {property.images?.length ? (
               property.images.map((img, i) => (
                 <img
                   key={i}
                   src={img}
                   alt={property.name}
-                  className="rounded-xl w-full h-72 object-cover shadow-sm hover:shadow-lg transition cursor-pointer"
                   onClick={() => openModal(i)}
+                  className="rounded-xl w-full h-72 object-cover cursor-pointer"
                 />
               ))
             ) : (
               <img
-                src="https://via.placeholder.com/600x400?text=No+Image+Available"
+                src="https://via.placeholder.com/600x400?text=No+Image"
+                className="rounded-xl w-full h-72 object-cover"
                 alt="No Image"
-                className="rounded-xl w-full h-72 object-cover shadow-sm"
               />
             )}
           </div>
 
-          {/* 🔍 Image Modal */}
+          {/* Big modal slider */}
           <Modal
             isOpen={isOpen}
-            onRequestClose={closeModal}
-            className="fixed inset-0 flex items-center justify-center z-50 bg-black/90 backdrop-blur-sm"
-            overlayClassName="fixed inset-0 bg-black/80 z-40"
+            onRequestClose={() => setIsOpen(false)}
+            className="fixed inset-0 flex items-center justify-center bg-black/90"
           >
-            <div className="relative w-full max-w-6xl mx-auto px-4">
-              <button
-                onClick={closeModal}
-                className="absolute top-4 right-6 text-white text-2xl font-bold z-50 hover:text-blue-400"
-              >
-                ✕
-              </button>
+            <Swiper
+              modules={[Navigation]}
+              navigation
+              initialSlide={selectedIndex}
+              slidesPerView={1}
+              spaceBetween={20}
+              className="w-full max-w-4xl"
+            >
+              {property.images.map((img, index) => (
+                <SwiperSlide key={index}>
+                  <img
+                    src={img}
+                    alt=""
+                    className="w-full h-[80vh] object-contain"
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
 
-              <Swiper
-                modules={[Navigation]}
-                navigation
-                initialSlide={selectedIndex}
-                spaceBetween={20}
-                slidesPerView={1}
-                className="w-full rounded-lg overflow-hidden"
-              >
-                {property.images.map((img, index) => (
-                  <SwiperSlide key={index}>
-                    <img
-                      src={img}
-                      alt={`Property ${index + 1}`}
-                      className="w-full h-[80vh] object-contain rounded-lg"
-                    />
-                    <p className="text-center text-white mt-3 text-sm opacity-75">
-                      Image {index + 1} of {property.images.length}
-                    </p>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-5 right-7 text-white text-3xl"
+            >
+              ✕
+            </button>
           </Modal>
         </section>
 
-        {/* 🏡 Info + Contact */}
+        {/* Details + Form */}
         <section className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 px-6 pb-20">
-          {/* Property Details */}
-          <div className="md:col-span-2 bg-white p-8 rounded-2xl shadow-md border border-gray-100">
-            <h1 className="text-3xl font-bold mb-4 text-gray-800">
-              {property.name}
-            </h1>
-            <ul className="text-gray-700 mb-6 space-y-2">
-              <li>🏡 <strong>Type:</strong> {property.type}</li>
-              <li>🛏️ <strong>Beds:</strong> {property.beds}</li>
-              <li>🛁 <strong>Baths:</strong> {property.baths}</li>
-              <li>🍳 <strong>Kitchen:</strong> {property.kitchen}</li>
-              <li>🏖️ <strong>Balcony:</strong> {property.balcony}</li>
-              <li>📐 <strong>Size:</strong> {property.size}</li>
-              <li>📍 <strong>Location:</strong> {property.location}</li>
+          <div className="md:col-span-2 bg-white p-8 rounded-2xl shadow">
+            <h1 className="text-3xl font-bold">{property.name}</h1>
+
+            <ul className="mt-4 space-y-2 text-gray-700">
+              <li>🏡 <b>Type:</b> {property.type}</li>
+              <li>🛏 <b>Beds:</b> {property.beds}</li>
+              <li>🛁 <b>Baths:</b> {property.baths}</li>
+              <li>🍳 <b>Kitchen:</b> {property.kitchen}</li>
+              <li>🏖 <b>Balcony:</b> {property.balcony}</li>
+              <li>📐 <b>Size:</b> {property.size}</li>
+              <li>📍 <b>Location:</b> {property.location}</li>
             </ul>
 
-            {/* 📝 Description */}
             {property.description && (
-              <div className="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100 mb-10">
-                <h2 className="text-lg font-semibold text-gray-800 mb-3">
-                  📝 Description
-                </h2>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                  {property.description}
-                </p>
+              <div className="bg-gray-50 p-5 rounded-xl mt-6">
+                <h2 className="text-lg font-semibold mb-2">📝 Description</h2>
+                <p>{property.description}</p>
               </div>
             )}
 
-            {/* 🎥 Video Tour */}
-            <div className="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100 mb-10">
-              <h2 className="text-lg font-semibold text-gray-800 mb-3">
-                🎥 Video Tour
-              </h2>
-              <div className="relative w-full pb-[56.25%] overflow-hidden rounded-lg shadow-md">
+            {/* Video */}
+            <div className="mt-8 bg-gray-50 p-5 rounded-xl">
+              <h2 className="text-lg font-semibold mb-2">🎥 Video Tour</h2>
+              <div className="relative w-full pb-[56.25%] rounded-xl overflow-hidden">
                 {renderVideo(property.videoUrl)}
               </div>
             </div>
 
-            {/* 🗺 Map */}
-            <div className="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-100">
-              <h2 className="text-lg font-semibold text-gray-800 mb-3">📍 Map</h2>
+            {/* Map */}
+            <div className="mt-8 bg-gray-50 p-5 rounded-xl">
+              <h2 className="text-lg font-semibold mb-2">📍 Map</h2>
               {renderMap()}
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white p-8 rounded-2xl shadow-md border border-gray-100">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-              Contact Us
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Interested in this property? Get in touch with us for more details
-              or to schedule a visit.
-            </p>
-            <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="bg-white p-8 rounded-2xl shadow">
+            <h2 className="text-2xl font-bold">Contact Us</h2>
+
+            <form onSubmit={handleSubmit} className="space-y-4 mt-4">
               <input
                 type="text"
+                required
                 placeholder="Your Name"
+                className="w-full p-3 border rounded-lg"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               />
+
               <input
                 type="email"
-                placeholder="Your Email"
+                required
+                placeholder="Email"
+                className="w-full p-3 border rounded-lg"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               />
+
               <textarea
                 rows="3"
-                placeholder="Your Message"
+                required
+                placeholder="Message"
+                className="w-full p-3 border rounded-lg"
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
-                required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               ></textarea>
 
-              <button
-                type="submit"
-                className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-500 transition"
-              >
+              <button className="w-full bg-blue-600 text-white py-3 rounded-lg">
                 Send Message
               </button>
 
               {sent && (
-                <p className="text-blue-600 mt-3 font-medium">
-                  ✅ Message sent successfully! (Demo mode)
+                <p className="text-blue-600 font-semibold mt-2">
+                  ✅ Message sent! (Demo)
                 </p>
               )}
             </form>
 
-            {/* 🟢 WhatsApp Quick Contact */}
             <a
               href={`https://wa.me/919871991277?text=${whatsappMessage}`}
               target="_blank"
-              rel="noopener noreferrer"
-              className="block text-center mt-5 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-500 transition"
+              className="block text-center mt-6 bg-blue-600 text-white py-3 rounded-lg"
             >
               💬 Chat on WhatsApp
             </a>
