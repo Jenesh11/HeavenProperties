@@ -1,8 +1,14 @@
 {
   "builds": [
-    { "src": "sanity/package.json", "use": "@vercel/static-build", "config": { "distDir": "sanity/dist" } }
+    {
+      "src": "sanity/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "sanity/dist"
+      }
+    }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "sanity/dist/$1" }
+    { "src": "/studio/(.*)", "dest": "sanity/dist/$1" }
   ]
 }
