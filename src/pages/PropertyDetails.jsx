@@ -39,7 +39,7 @@ export default function PropertyDetails() {
       </div>
     );
 
-  const property = properties.find((p) => String(p.id) === String(id));
+  const property = properties.find((p) => String(p._id) === String(id));
   if (!property) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white">

@@ -24,7 +24,7 @@ const PropertyCard = ({ property }) => (
 
       {/* 🔗 View Property Link */}
       <Link
-        to={`/property/${property.id}`}
+        to={`/property/${property._id}`}
         className="inline-block mt-3 text-sm text-blue-600 font-medium hover:text-blue-500"
       >
         View Property →

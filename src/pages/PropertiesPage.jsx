@@ -90,8 +90,8 @@ export default function PropertiesPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-center">
               {filtered.map((property) => (
                 <Link
-                  key={property.id}
-                  to={`/property/${property.id}`}
+                  key={property._id}
+                  to={`/property/${property._id}`}
                   className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-lg overflow-hidden transition-transform hover:scale-[1.02]"
                 >
                   <img
