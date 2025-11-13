@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import emailjs from "@emailjs/browser";
 
 Modal.setAppElement("#root");
 
@@ -21,11 +22,36 @@ export default function PropertyDetails() {
 
   // ✔️ ONLY ONE handleSubmit (duplicate removed)
   const handleSubmit = (e) => {
-    e.preventDefault();
-    setSent(true);
-    setForm({ name: "", email: "", message: "" });
-    setTimeout(() => setSent(false), 4000);
+  e.preventDefault();
+
+  const templateParams = {
+    name: form.name,
+    email: form.email,
+    message: form.message,
   };
+
+  emailjs
+    .send(
+      "service_xtpaerv",     // 🔹 Replace with your EmailJS Service ID
+      "template_ng9yvws",    // 🔹 Replace with your Template ID
+      templateParams,
+      "rMecz2Ji6apXLw6As"       // 🔹 Replace with your Public Key
+    )
+    .then(
+      () => {
+        setSent(true);
+        setForm({ name: "", email: "", message: "" });
+
+        setTimeout(() => {
+          setSent(false);
+        }, 4000);
+      },
+      (error) => {
+        console.error("EmailJS Error:", error);
+        alert("Failed to send message. Try again.");
+      }
+    );
+    }
 
   // ⭐ Agent Information
   const agent = {

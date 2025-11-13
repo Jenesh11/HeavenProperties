@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import useFeaturedPropertiesFromSanity from "../hooks/useFeaturedPropertiesFromSanity";
+import emailjs from "@emailjs/browser";
 
 
 
@@ -9,15 +10,31 @@ export default function ContactPage() {
   const [sent, setSent] = useState(false);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // Simple local submission simulation
-    setSent(true);
-    setForm({ name: "", email: "", message: "" });
-
-    // Optionally show success message temporarily
-    setTimeout(() => setSent(false), 4000);
+  const templateParams = {
+    name: form.name,
+    email: form.email,
+    message: form.message,
   };
+
+  emailjs
+    .send(
+      "service_xtpaerv",
+      "template_ng9yvws",
+      templateParams,
+      "rMecz2Ji6apXLw6As"
+    )
+    .then(() => {
+      setSent(true);
+      setForm({ name: "", email: "", message: "" });
+      setTimeout(() => setSent(false), 4000);
+    })
+    .catch((error) => {
+      console.error("EmailJS error:", error);
+      alert("Failed to send message. Try again.");
+    });
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-gray-100 text-gray-900">
@@ -96,7 +113,7 @@ export default function ContactPage() {
 
               {sent && (
                 <p className="text-blue-600 mt-3 font-medium">
-                  ✅ Message sent successfully! (Demo mode)
+                  ✅ Message sent successfully! 
                 </p>
               )}
             </form>
