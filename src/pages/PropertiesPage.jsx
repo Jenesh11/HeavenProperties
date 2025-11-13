@@ -62,7 +62,7 @@ export default function PropertiesPage() {
         {/* 🏡 Header Section */}
         <section className="max-w-7xl mx-auto px-10 py-16 text-center">
           <h1 className="text-4xl font-bold mb-4">
-            Explore <span className="text-green-600">Properties</span>
+            Explore <span className="text-blue-600">Properties</span>
           </h1>
           <p className="text-gray-600 mb-8">
             Find your dream home — from cozy rentals to luxurious villas.
@@ -76,7 +76,7 @@ export default function PropertiesPage() {
                 onClick={() => setFilter(option)}
                 className={`px-5 py-2 rounded-lg font-medium border transition ${
                   filter === option
-                    ? "bg-green-600 text-white border-green-600"
+                    ? "bg-blue-600 text-white border-blue-600"
                     : "bg-white text-gray-600 border-gray-300 hover:bg-gray-100"
                 }`}
               >
@@ -108,7 +108,7 @@ export default function PropertiesPage() {
                         (property.purpose || property.type || "")
                           .toLowerCase()
                           .includes("sale")
-                          ? "bg-green-100 text-green-700"
+                          ? "bg-blue-100 text-blue-700"
                           : "bg-blue-100 text-blue-700"
                       }`}
                     >
@@ -123,7 +123,7 @@ export default function PropertiesPage() {
                       {property.location || "Location not specified"}
                     </p>
 
-                    <p className="text-green-600 font-bold mt-2">
+                    <p className="text-blue-600 font-bold mt-2">
                       {property.price || "Price on request"}
                     </p>
                   </div>

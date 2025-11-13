@@ -44,7 +44,7 @@ export default function PropertyDetails() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white">
         <h1 className="text-2xl font-semibold mb-3">Property not found 🏡</h1>
-        <Link to="/properties" className="text-green-400 hover:underline">
+        <Link to="/properties" className="text-blue-400 hover:underline">
           ← Back to Properties
         </Link>
       </div>
@@ -199,7 +199,7 @@ export default function PropertyDetails() {
             <div className="relative w-full max-w-6xl mx-auto px-4">
               <button
                 onClick={closeModal}
-                className="absolute top-4 right-6 text-white text-2xl font-bold z-50 hover:text-green-400"
+                className="absolute top-4 right-6 text-white text-2xl font-bold z-50 hover:text-blue-400"
               >
                 ✕
               </button>
@@ -291,7 +291,7 @@ export default function PropertyDetails() {
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               />
               <input
                 type="email"
@@ -299,7 +299,7 @@ export default function PropertyDetails() {
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               />
               <textarea
                 rows="3"
@@ -307,18 +307,18 @@ export default function PropertyDetails() {
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               ></textarea>
 
               <button
                 type="submit"
-                className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-500 transition"
+                className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-500 transition"
               >
                 Send Message
               </button>
 
               {sent && (
-                <p className="text-green-600 mt-3 font-medium">
+                <p className="text-blue-600 mt-3 font-medium">
                   ✅ Message sent successfully! (Demo mode)
                 </p>
               )}
@@ -329,7 +329,7 @@ export default function PropertyDetails() {
               href={`https://wa.me/919871991277?text=${whatsappMessage}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-center mt-5 bg-green-500 text-white py-3 rounded-lg font-semibold hover:bg-green-400 transition"
+              className="block text-center mt-5 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-500 transition"
             >
               💬 Chat on WhatsApp
             </a>

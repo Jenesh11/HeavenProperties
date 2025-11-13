@@ -29,7 +29,7 @@ export default function ContactPage() {
         {/* Header Section */}
         <section className="max-w-6xl mx-auto text-center py-16 px-6">
           <h1 className="text-4xl font-bold mb-4">
-            Get in <span className="text-green-600">Touch</span>
+            Get in <span className="text-blue-600">Touch</span>
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
             Have questions about buying, selling, or renting a property? Our team
@@ -55,7 +55,7 @@ export default function ContactPage() {
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   placeholder="Your Name"
                   required
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                 />
               </div>
 
@@ -69,7 +69,7 @@ export default function ContactPage() {
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   placeholder="you@example.com"
                   required
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                 />
               </div>
 
@@ -83,19 +83,19 @@ export default function ContactPage() {
                   placeholder="Write your message..."
                   rows="4"
                   required
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                 ></textarea>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-500 transition"
+                className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-500 transition"
               >
                 Send Message
               </button>
 
               {sent && (
-                <p className="text-green-600 mt-3 font-medium">
+                <p className="text-blue-600 mt-3 font-medium">
                   ✅ Message sent successfully! (Demo mode)
                 </p>
               )}
@@ -140,11 +140,11 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto px-10 grid md:grid-cols-4 gap-10">
           <div>
             <h3 className="text-xl font-semibold mb-3">
-              Heaven <span className="text-green-600">Properties</span>
+              Heaven <span className="text-blue-600">Properties</span>
             </h3>
             <p className="text-gray-600 text-sm">
               Explore{" "}
-              <span className="text-green-600 font-semibold">
+              <span className="text-blue-600 font-semibold">
                 Heaven Properties
               </span>{" "}
               with expert help. Find your perfect home or investment property
@@ -155,7 +155,7 @@ export default function ContactPage() {
                 <a
                   key={s}
                   href="#"
-                  className="w-8 h-8 flex items-center justify-center bg-green-600 text-white rounded-full hover:bg-green-500"
+                  className="w-8 h-8 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-blue-500"
                 >
                   <i className={`fab fa-${s}`}></i>
                 </a>
@@ -179,7 +179,7 @@ export default function ContactPage() {
                 📱{" "}
                 <a
                   href="#"
-                  className="hover:text-green-600 transition font-medium"
+                  className="hover:text-blue-600 transition font-medium"
                 >
                   WhatsApp
                 </a>
@@ -188,7 +188,7 @@ export default function ContactPage() {
                 📸{" "}
                 <a
                   href="#"
-                  className="hover:text-green-600 transition font-medium"
+                  className="hover:text-blue-600 transition font-medium"
                 >
                   Instagram
                 </a>
