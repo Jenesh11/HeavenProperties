@@ -19,6 +19,8 @@ export default function PropertyDetails() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
 
   // ✔️ ONLY ONE handleSubmit (duplicate removed)
   const handleSubmit = (e) => {
@@ -39,6 +41,7 @@ export default function PropertyDetails() {
     )
     .then(
       () => {
+        setDisabled(true); // ⛔ Disable instantly after first click
         setSent(true);
         setForm({ name: "", email: "", message: "" });
 
@@ -399,9 +402,15 @@ export default function PropertyDetails() {
                 }
               ></textarea>
 
-              <button className="w-full bg-blue-600 text-white py-3 rounded-lg">
-                Send Message
-              </button>
+              <button
+  disabled={disabled}
+  className={`w-full py-3 rounded-lg text-white 
+    ${disabled ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}
+  `}
+>
+  {disabled ? "Message Sent" : "Send Message"}
+</button>
+
 
               {sent && <p className="text-blue-600 mt-2">Message sent! ✔</p>}
             </form>

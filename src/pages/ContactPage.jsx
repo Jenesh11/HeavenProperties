@@ -8,6 +8,8 @@ import emailjs from "@emailjs/browser";
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
 
   const handleSubmit = (e) => {
   e.preventDefault();
@@ -27,6 +29,7 @@ export default function ContactPage() {
     )
     .then(() => {
       setSent(true);
+      setDisabled(true);  // ⛔ Disable button after sending
       setForm({ name: "", email: "", message: "" });
       setTimeout(() => setSent(false), 4000);
     })
@@ -105,11 +108,14 @@ export default function ContactPage() {
               </div>
 
               <button
-                type="submit"
-                className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-500 transition"
-              >
-                Send Message
-              </button>
+  disabled={disabled}
+  className={`w-full py-3 rounded-lg text-white 
+    ${disabled ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}
+  `}
+>
+  {disabled ? "Message Sent" : "Send Message"}
+</button>
+
 
               {sent && (
                 <p className="text-blue-600 mt-3 font-medium">
